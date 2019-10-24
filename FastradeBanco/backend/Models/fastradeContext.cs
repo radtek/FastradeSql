@@ -29,7 +29,6 @@ namespace backend.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-
                 optionsBuilder.UseSqlServer("Server=DESKTOP-KHEDHML\\SQLEXPRESS; Database=fastrade; User Id=sa; Password=132");
             }
         }

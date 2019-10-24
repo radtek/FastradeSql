@@ -33,9 +33,9 @@ namespace backend.Controllers {
         }
         //Post: Api/CatProduto
         [HttpPost]
-        public async Task<ActionResult<CatProduto>> Post (CatProduto catProduto){
+        public async Task<ActionResult<CatProduto>> Post (CatProduto catproduto){
             try{
-                await _contexto.AddAsync (catProduto);
+                await _contexto.AddAsync (catproduto);
 
                 await _contexto.SaveChangesAsync();
                 
@@ -43,22 +43,22 @@ namespace backend.Controllers {
                 }catch (DbUpdateConcurrencyException){
                     throw;
             }
-            return catProduto;
+            return catproduto;
         }
         //Put: Api/CatProduto
         [HttpPut ("{id}")]
-        public async Task<ActionResult> Put (int id, CatProduto catProduto){
-            if(id != catProduto.IdCatProduto){
+        public async Task<ActionResult> Put (int id, CatProduto catproduto){
+            if(id != catproduto.IdCatProduto){
                 
                 return BadRequest ();
             }
-            _contexto.Entry (catProduto).State = EntityState.Modified;
+            _contexto.Entry (catproduto).State = EntityState.Modified;
             try{
                 await _contexto.SaveChangesAsync ();
             }catch (DbUpdateConcurrencyException){
-                var CatProduto_valido = await _contexto.CatProduto.FindAsync (id);
+                var catproduto_valido = await _contexto.CatProduto.FindAsync (id);
 
-                if(CatProduto_valido == null) {
+                if(catproduto_valido == null) {
                     return NotFound ();
                 }else{
                     throw;
@@ -66,17 +66,19 @@ namespace backend.Controllers {
             }
             return NoContent();
         }
-        //Delete: Api/CatProduto
-        [HttpDelete("{id")]
+         // DELETE api/CatProduto/id
+        [HttpDelete("{id}")]
         public async Task<ActionResult<CatProduto>> Delete(int id){
-            var catProduto = await _contexto.CatProduto.FindAsync(id);
-            if (catProduto == null){
+
+            var catproduto = await _contexto.CatProduto.FindAsync(id);
+            if(catproduto == null){
                 return NotFound();
             }
-            _contexto.CatProduto.Remove(catProduto);
+
+            _contexto.CatProduto.Remove(catproduto);
             await _contexto.SaveChangesAsync();
 
-            return catProduto;
-        }
+            return catproduto;
+        }  
     }
-}
+}   

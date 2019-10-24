@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models
 {
-    
     [Table("Cat_Produto")]
     public partial class CatProduto
     {
