@@ -53,3 +53,5 @@ C:\Users\fic\Desktop\FastradeBanco\backend\bin\Debug\netcoreapp3.0\Swashbuckle.A
 C:\Users\fic\Desktop\FastradeBanco\backend\bin\Debug\netcoreapp3.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\fic\Desktop\FastradeBanco\backend\bin\Debug\netcoreapp3.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\fic\Desktop\FastradeBanco\backend\obj\Debug\netcoreapp3.0\backend.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\fic\Desktop\FastradeBanco\backend\bin\Debug\netcoreapp3.0\backend.xml
+C:\Users\fic\Desktop\FastradeBanco\backend\obj\Debug\netcoreapp3.0\backend.xml
