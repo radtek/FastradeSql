@@ -19,8 +19,10 @@ namespace backend.Models
         public int IdProduto { get; set; }
         [Column("Id_Cat_Produto")]
         public int? IdCatProduto { get; set; }
+        [Required]
         [StringLength(255)]
         public string Nome { get; set; }
+        [Required]
         [StringLength(255)]
         public string Validade { get; set; }
 

@@ -82,6 +82,7 @@ namespace backend.Controllers {
         /// <param name="pedido"></param>
         /// <returns>Alteração de pedidos</returns>
         [HttpPut ("{id}")]
+        
         public async Task<ActionResult> Put (int id, Pedido pedido) {
 
             //Se o Id do objeto não existir ele retorna 404 

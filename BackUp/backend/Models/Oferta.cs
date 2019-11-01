@@ -14,9 +14,11 @@ namespace backend.Models
         public int? IdProduto { get; set; }
         [Column("Id_Usuario")]
         public int? IdUsuario { get; set; }
-        public int? Quantidade { get; set; }
+        public int Quantidade { get; set; }
+        [Required]
         [StringLength(255)]
         public string Preco { get; set; }
+        [Required]
         [Column("Foto_Url", TypeName = "text")]
         public string FotoUrl { get; set; }
 

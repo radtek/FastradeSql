@@ -14,7 +14,7 @@ namespace backend.Models
         public int? IdProduto { get; set; }
         [Column("Id_Usuario")]
         public int? IdUsuario { get; set; }
-        public int? Quantidade { get; set; }
+        public int Quantidade { get; set; }
 
         [ForeignKey(nameof(IdProduto))]
         [InverseProperty(nameof(Produto.Pedido))]

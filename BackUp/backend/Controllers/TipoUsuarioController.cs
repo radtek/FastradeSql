@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,7 @@ namespace backend_fastread.Controllers
     /// </summary>
     /// <returns>Lista de tipo de usuario</returns>
     [HttpGet]
+    [Authorize(Roles = "3")]   
     public async Task<ActionResult<List<TipoUsuario>>> Get () {
 
         var TipoUsuarios = await _contexto.TipoUsuario.ToListAsync ();
@@ -37,6 +39,7 @@ namespace backend_fastread.Controllers
     /// <param name="id"></param>
     /// <returns>Unico ID de um tipo de usuario</returns>
     [HttpGet ("{id}")]
+    [Authorize(Roles = "3")]
     public async Task<ActionResult<TipoUsuario>> Get (int id){
 
         var TipoUsuarios = await _contexto.TipoUsuario.FindAsync (id);
@@ -53,6 +56,7 @@ namespace backend_fastread.Controllers
     /// <param name="tipousuario"></param>
     /// <returns>Envia dados de tipo de usuario</returns>
     [HttpPost]
+    [Authorize(Roles = "3")]
     public async Task<ActionResult<TipoUsuario>> Post (TipoUsuario tipousuario) {
 
         try{
@@ -73,6 +77,7 @@ namespace backend_fastread.Controllers
     /// <param name="tipousuario"></param>
     /// <returns>Alteração de dados de tipo de usuario</returns>
     [HttpPut ("{id}")]
+    [Authorize(Roles = "3")]
     public async Task<ActionResult> Put (int id, TipoUsuario tipousuario){
 
         //Se o id do objeto não existir
@@ -109,6 +114,7 @@ namespace backend_fastread.Controllers
     /// <param name="id"></param>
     /// <returns>Excluir dados de tipo de usuario</returns>
     [HttpDelete ("{id}")]
+    [Authorize(Roles = "3")]
     public async Task<ActionResult<TipoUsuario>> Delete (int id){
 
         var tipousuario = await _contexto.TipoUsuario.FindAsync(id);

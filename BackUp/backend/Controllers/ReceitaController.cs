@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ namespace backend.Controllers {
         /// </summary>
         /// <returns>Lista de receita</returns>
         [HttpGet]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<List<Receita>>> Get () {
 
             var receitas = await _contexto.Receita.ToListAsync ();
@@ -32,6 +34,8 @@ namespace backend.Controllers {
         /// <param name="id"></param>
         /// <returns>Unico ID de uma receita</returns>
         [HttpGet ("{id}")]
+        [Authorize(Roles = "3")]
+
         public async Task<ActionResult<Receita>> Get(int id){
             var receita = await _contexto.Receita.FindAsync (id);
 
@@ -47,6 +51,7 @@ namespace backend.Controllers {
         /// <param name="receita"></param>
         /// <returns>Envia dados de uma receita</returns>
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Receita>> Post (Receita receita){
             try{
                 await _contexto.AddAsync (receita);
@@ -67,6 +72,7 @@ namespace backend.Controllers {
         /// <param name="receita"></param>
         /// <returns>Alteração de dados de uma receita</returns>
         [HttpPut ("{id}")]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult> Put (int id, Receita receita){
             if(id != receita.IdReceita){
                 
@@ -93,6 +99,7 @@ namespace backend.Controllers {
          /// <param name="id"></param>
          /// <returns>Exclui dados de uma receita</returns>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<Receita>> Delete(int id){
 
             var receita = await _contexto.Receita.FindAsync(id);

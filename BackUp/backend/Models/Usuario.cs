@@ -20,14 +20,18 @@ namespace backend.Models
         public int? IdEndereco { get; set; }
         [Column("Id_Tipo_Usuario")]
         public int? IdTipoUsuario { get; set; }
+        [Required]
         [Column("Nome_Razao_Social")]
         [StringLength(255)]
         public string NomeRazaoSocial { get; set; }
+        [Required]
         [Column("CPF_CNPJ")]
         [StringLength(14)]
         public string CpfCnpj { get; set; }
+        [Required]
         [StringLength(255)]
         public string Email { get; set; }
+        [Required]
         [StringLength(255)]
         public string Senha { get; set; }
         [StringLength(255)]

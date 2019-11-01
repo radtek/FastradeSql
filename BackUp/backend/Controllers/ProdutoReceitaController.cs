@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ namespace backend.Controllers {
         /// </summary>
         /// <returns>Lista de produtos de uma receita</returns>
         [HttpGet]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<List<ProdutoReceita>>> Get () {
 
             var produtoreceitas = await _contexto.ProdutoReceita.Include("IdProdutoNavigation").Include("IdReceitaNavigation").ToListAsync();
@@ -32,6 +34,7 @@ namespace backend.Controllers {
         /// <param name="id"></param>
         /// <returns>Unico ID de um produto receita</returns>
         [HttpGet ("{id}")]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<ProdutoReceita>> Get(int id){
             var produtoreceita = await _contexto.ProdutoReceita.Include("IdProdutoNavigation").Include("IdReceitaNavigation").FirstOrDefaultAsync (e => e.IdProdutoReceita == id);
 
@@ -47,6 +50,7 @@ namespace backend.Controllers {
         /// <param name="produtoreceita"></param>
         /// <returns>Envia dados de um produto receita</returns>
         [HttpPost]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<ProdutoReceita>> Post (ProdutoReceita produtoreceita){
             try{
                 await _contexto.AddAsync (produtoreceita);
@@ -67,6 +71,7 @@ namespace backend.Controllers {
         /// <param name="produtoreceita"></param>
         /// <returns>Alteração de dados produto receita</returns>
         [HttpPut ("{id}")]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult> Put (int id, ProdutoReceita produtoreceita){
             if(id != produtoreceita.IdProdutoReceita){
                 
@@ -93,6 +98,7 @@ namespace backend.Controllers {
          /// <param name="id"></param>
          /// <returns>Exclui dado de produto receita</returns>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<ProdutoReceita>> Delete(int id){
 
             var produtoreceita = await _contexto.ProdutoReceita.FindAsync(id);

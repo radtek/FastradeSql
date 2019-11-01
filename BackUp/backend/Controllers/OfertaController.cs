@@ -60,6 +60,7 @@ namespace backend.Controllers {
                     var fileName = ContentDispositionHeaderValue.Parse (file.ContentDisposition).FileName.Trim ('"');
                     var fullPath = Path.Combine (pathToSave, fileName);
                     var dbPath = Path.Combine (folderName, fileName);
+                 
 
                     using (var stream = new FileStream (fullPath, FileMode.Create)) {
                         file.CopyTo (stream);
@@ -69,7 +70,9 @@ namespace backend.Controllers {
                    oferta.IdUsuario = Convert.ToInt32(Request.Form["IdUsuario"]);
                    oferta.Quantidade = Convert.ToInt32(Request.Form["Quantidade"]);
                    oferta.Preco = Request.Form["Preco"];
-                   oferta.FotoUrl = fileName;     
+                   oferta.FotoUrl = Path.Combine(folderName, fileName); 
+                   
+
                   
 
                 } else {
