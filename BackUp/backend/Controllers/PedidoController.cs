@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using backend.Models;
+using backend.Domains;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,7 @@ namespace backend.Controllers {
         /// </summary>
         /// <returns>Lista de pedidos</returns>
         [HttpGet]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<List<Pedido>>> Get () {
 
             //Include ("") = Adiciona o 
@@ -42,6 +44,7 @@ namespace backend.Controllers {
         /// <param name="id"></param>
         /// <returns>Unico ID de pedido</returns>
         [HttpGet ("{id}")]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<Pedido>> Get (int id) {
 
             // FindAsync = procura algo especifico no banco 
@@ -62,6 +65,7 @@ namespace backend.Controllers {
         /// <param name="pedido"></param>
         /// <returns>Envia dados de pedido</returns>
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Pedido>> Post (Pedido pedido) {
 
             try {
@@ -82,7 +86,7 @@ namespace backend.Controllers {
         /// <param name="pedido"></param>
         /// <returns>Alteração de pedidos</returns>
         [HttpPut ("{id}")]
-        
+        [Authorize]
         public async Task<ActionResult> Put (int id, Pedido pedido) {
 
             //Se o Id do objeto não existir ele retorna 404 
@@ -119,6 +123,7 @@ namespace backend.Controllers {
         /// <param name="id"></param>
         /// <returns>Excluir pedidos</returns>
         [HttpDelete ("{id}")]
+        [Authorize]
         public async Task<ActionResult<Pedido>> Delete (int id) {
 
             var pedido = await _contexto.Pedido.FindAsync (id);

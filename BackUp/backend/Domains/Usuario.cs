@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace backend.Models
+namespace backend.Domains
 {
     public partial class Usuario
     {
@@ -34,8 +34,12 @@ namespace backend.Models
         [Required]
         [StringLength(255)]
         public string Senha { get; set; }
+        [Required]
         [StringLength(255)]
         public string Celular { get; set; }
+        [Required]
+        [Column("Foto_Url_Usuario", TypeName = "text")]
+        public string FotoUrlUsuario { get; set; }
 
         [ForeignKey(nameof(IdEndereco))]
         [InverseProperty(nameof(Endereco.Usuario))]

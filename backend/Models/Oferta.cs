@@ -19,8 +19,8 @@ namespace backend.Models
         [StringLength(255)]
         public string Preco { get; set; }
         [Required]
-        [Column("Foto_Url", TypeName = "text")]
-        public string FotoUrl { get; set; }
+        [Column("Foto_Url_Oferta", TypeName = "text")]
+        public string FotoUrlOferta { get; set; }
 
         [ForeignKey(nameof(IdProduto))]
         [InverseProperty(nameof(Produto.Oferta))]

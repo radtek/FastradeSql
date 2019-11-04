@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using backend.Models;
+using backend.Domains;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ namespace backend.Controllers {
         /// </summary>
         /// <returns>Lista de categorias de produtos</returns>
         [HttpGet]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<List<CatProduto>>> Get () {
 
             var catprodutos = await _contexto.CatProduto.ToListAsync ();
@@ -32,6 +34,7 @@ namespace backend.Controllers {
         /// <param name="id"></param>
         /// <returns>Unico Id de categoria produtos</returns>
         [HttpGet ("{id}")]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<CatProduto>> Get(int id){
             var catproduto = await _contexto.CatProduto.FindAsync (id);
 
@@ -47,6 +50,7 @@ namespace backend.Controllers {
         /// <param name="catproduto"></param>
         /// <returns>Envia uma categoria produto</returns>
         [HttpPost]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<CatProduto>> Post (CatProduto catproduto){
             try{
                 await _contexto.AddAsync (catproduto);
@@ -67,6 +71,7 @@ namespace backend.Controllers {
         /// <param name="catproduto"></param>
         /// <returns>Alteramento de categoria produto</returns>
         [HttpPut ("{id}")]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult> Put (int id, CatProduto catproduto){
             if(id != catproduto.IdCatProduto){
                 
@@ -93,6 +98,7 @@ namespace backend.Controllers {
          /// <param name="id"></param>
          /// <returns>Deleta uma categoria</returns>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<CatProduto>> Delete(int id){
 
             var catproduto = await _contexto.CatProduto.FindAsync(id);

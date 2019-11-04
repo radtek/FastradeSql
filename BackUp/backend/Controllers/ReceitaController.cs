@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using backend.Models;
+using backend.Domains;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -51,7 +51,7 @@ namespace backend.Controllers {
         /// <param name="receita"></param>
         /// <returns>Envia dados de uma receita</returns>
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<Receita>> Post (Receita receita){
             try{
                 await _contexto.AddAsync (receita);

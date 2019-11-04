@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using backend.Models;
+using backend.Domains;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,7 @@ namespace backend_fastread.Controllers
     /// </summary>
     /// <returns>Lista de endeço</returns>
     [HttpGet]
+    [Authorize(Roles = "3")]
     public async Task<ActionResult<List<Endereco>>> Get () {
 
         var Enderecos = await _contexto.Endereco.ToListAsync ();
@@ -38,6 +40,7 @@ namespace backend_fastread.Controllers
     /// <param name="id"></param>
     /// <returns>Pegamos apenas um endereço</returns>
     [HttpGet ("{id}")]
+    [Authorize(Roles = "3")]
     public async Task<ActionResult<Endereco>> Get (int id){
 
         var Enderecos = await _contexto.Endereco.FindAsync (id);
@@ -54,6 +57,7 @@ namespace backend_fastread.Controllers
     /// <param name="endereco"></param>
     /// <returns>Enviamos os dados do endereço</returns>
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<Endereco>> Post (Endereco endereco) {
 
         try{
@@ -74,6 +78,7 @@ namespace backend_fastread.Controllers
     /// <param name="endereco"></param>
     /// <returns>Alteramos os dados do endereço</returns>
     [HttpPut ("{id}")]
+    [Authorize]
     public async Task<ActionResult> Put (int id, Endereco endereco){
 
         //Se o id do objeto não existir
@@ -110,7 +115,7 @@ namespace backend_fastread.Controllers
     /// <param name="id"></param>
     /// <returns>Deletamos os dados do endereço</returns>
     [HttpDelete ("{id}")]
-
+    [Authorize(Roles = "3")]
     public async Task<ActionResult<Endereco>> Delete (int id){
 
         var endereco = await _contexto.Endereco.FindAsync(id);

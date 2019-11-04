@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using backend.Models;
+using backend.Domains;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UploadControllers;
 
 namespace backend.Controllers {
     [Route ("api/[controller]")]
@@ -14,12 +16,15 @@ namespace backend.Controllers {
 
         fastradeContext _contexto = new fastradeContext ();
         
+        UploadController _Upload = new UploadController();
+        
         //Get: Api/Oferta
         /// <summary>
         /// Aqui são todas as ofertas
         /// </summary>
         /// <returns>Lista de Ofertas</returns>
         [HttpGet]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<List<Oferta>>> Get () {
             //Include("")
             var oferta = await _contexto.Oferta.Include("IdProdutoNavigation").Include("IdUsuarioNavigation").ToListAsync();
@@ -35,6 +40,7 @@ namespace backend.Controllers {
         /// <param name="id"></param>
         /// <returns>Mostramos unico ID de oferta</returns>
         [HttpGet ("{id}")]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<Oferta>> Get(int id){
             var oferta = await _contexto.Oferta.Include("IdProdutoNavigation").Include("IdUsuarioNavigation").FirstOrDefaultAsync (e =>e.IdOferta ==id);
 
@@ -50,41 +56,18 @@ namespace backend.Controllers {
         /// <param name="oferta"></param>
         /// <returns>Envia uma oferta</returns>
         [HttpPost]
+        // [Authorize(Roles = "3")]
+        // [Authorize(Roles = "2")]
         public async Task<ActionResult<Oferta>> Post ([FromForm]Oferta oferta){
              try {
-                 if (Request.Form.Files.Count > 0) {
-                    
-                    var file = Request.Form.Files[0];
-                    var folderName = Path.Combine ("Resources", "Images");
-                    var pathToSave = Path.Combine (Directory.GetCurrentDirectory (), folderName);
-                    var fileName = ContentDispositionHeaderValue.Parse (file.ContentDisposition).FileName.Trim ('"');
-                    var fullPath = Path.Combine (pathToSave, fileName);
-                    var dbPath = Path.Combine (folderName, fileName);
-                 
-
-                    using (var stream = new FileStream (fullPath, FileMode.Create)) {
-                        file.CopyTo (stream);
-                    }   
-
+                   var arquivo = Request.Form.Files[0];
                    oferta.IdProduto = Convert.ToInt32(Request.Form["IdProduto"]);
+                   oferta.FotoUrlOferta = _Upload.Upload(arquivo, "Resources");
                    oferta.IdUsuario = Convert.ToInt32(Request.Form["IdUsuario"]);
-                   oferta.Quantidade = Convert.ToInt32(Request.Form["Quantidade"]);
+                   oferta.Quantidade = Convert.ToInt32(Request.Form["Quantidade"]);           
                    oferta.Preco = Request.Form["Preco"];
-                   oferta.FotoUrl = Path.Combine(folderName, fileName); 
                    
-
-                  
-
-                } else {
-                   return NotFound(
-                    new
-                    {
-                        Mensagem = "Atenção a imagem não foi selecionada!",
-                        Erro = true
-                    });        
-                }          
-
-                
+                      
                 //Tratamos contra ataques de SQL Injection
                 await _contexto.AddAsync(oferta);
                 //Salvamos efetivamente o nosso objeto no banco de dados
@@ -93,8 +76,7 @@ namespace backend.Controllers {
             } catch (DbUpdateConcurrencyException) {
                 throw;
             }
-
-            return oferta;
+                return oferta;
         }
         //Put: Api/Oferta
         /// <summary>
@@ -104,6 +86,8 @@ namespace backend.Controllers {
         /// <param name="oferta"></param>
         /// <returns>Alteração de dados de uma oferta</returns>
         [HttpPut ("{id}")]
+        [Authorize(Roles = "3")]
+        [Authorize(Roles = "2")]
         public async Task<ActionResult> Put (int id, Oferta oferta){
             if(id != oferta.IdOferta){
                 
@@ -130,6 +114,8 @@ namespace backend.Controllers {
          /// <param name="id"></param>
          /// <returns>Excluir uma oferta</returns>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "3")]
+        [Authorize(Roles = "2")]
         public async Task<ActionResult<Oferta>> Delete(int id){
 
             var oferta = await _contexto.Oferta.FindAsync(id);

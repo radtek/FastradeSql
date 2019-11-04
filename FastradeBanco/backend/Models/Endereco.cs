@@ -15,13 +15,17 @@ namespace backend.Models
         [Key]
         [Column("Id_Endereco")]
         public int IdEndereco { get; set; }
+        [Required]
         [StringLength(255)]
         public string Rua { get; set; }
+        [Required]
         [StringLength(255)]
         public string Bairro { get; set; }
-        public int? Numero { get; set; }
+        public int Numero { get; set; }
+        [Required]
         [StringLength(2)]
         public string Estado { get; set; }
+        [Required]
         [Column("CEP")]
         [StringLength(9)]
         public string Cep { get; set; }

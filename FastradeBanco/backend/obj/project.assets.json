@@ -6526,11 +6526,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\fic\\Desktop\\FastradeBanco\\backend\\backend.csproj",
+      "projectUniqueName": "C:\\Users\\fic\\Desktop\\FastradeSql\\FastradeBanco\\backend\\backend.csproj",
       "projectName": "backend",
-      "projectPath": "C:\\Users\\fic\\Desktop\\FastradeBanco\\backend\\backend.csproj",
+      "projectPath": "C:\\Users\\fic\\Desktop\\FastradeSql\\FastradeBanco\\backend\\backend.csproj",
       "packagesPath": "C:\\Users\\fic\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\fic\\Desktop\\FastradeBanco\\backend\\obj\\",
+      "outputPath": "C:\\Users\\fic\\Desktop\\FastradeSql\\FastradeBanco\\backend\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

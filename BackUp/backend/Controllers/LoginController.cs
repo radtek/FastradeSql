@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using backend.Models;
+using backend.Domains;
 using backend.ViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -29,9 +29,9 @@ namespace backend.Controllers {
         // Chamamos nosso método para validar nosso usuário da aplicação
         public Usuario AuthenticateUser (LoginViewModel login) {
             var usuario = _context.Usuario.FirstOrDefault (u => u.Email == login.Email && u.Senha == login.Senha);
-  
+
             return usuario;
-            
+
         }
 
         // Criamos nosso método que vai gerar nosso Token
@@ -40,18 +40,15 @@ namespace backend.Controllers {
             var credentials = new SigningCredentials (securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new [] {
-                
+
                 // Definimos nossas Claims (dados da sessão) para poderem ser capturadas
                 // a qualquer momento enquanto o Token for ativo  
                 new Claim (JwtRegisteredClaimNames.NameId, userInfo.NomeRazaoSocial),
                 new Claim (JwtRegisteredClaimNames.Email, userInfo.Email),
                 new Claim (JwtRegisteredClaimNames.Jti, Guid.NewGuid ().ToString ()),
-                new Claim(ClaimTypes.Role, userInfo.IdTipoUsuario.ToString())
-
                 //Define uma Claim atribuindo o perfil do usuário pelo Tipo de usuario
 
-
-               
+                new Claim (ClaimTypes.Role, userInfo.IdTipoUsuario.ToString ())
 
             };
 

@@ -38,7 +38,7 @@ namespace backend.Models
             modelBuilder.Entity<CatProduto>(entity =>
             {
                 entity.HasKey(e => e.IdCatProduto)
-                    .HasName("PK__Cat_Prod__27A1E38DC086440C");
+                    .HasName("PK__Cat_Prod__27A1E38D942BAEDF");
 
                 entity.Property(e => e.Tipo).IsUnicode(false);
             });
@@ -46,7 +46,7 @@ namespace backend.Models
             modelBuilder.Entity<Endereco>(entity =>
             {
                 entity.HasKey(e => e.IdEndereco)
-                    .HasName("PK__Endereco__4B5640357E865BFF");
+                    .HasName("PK__Endereco__4B5640356CBAAA35");
 
                 entity.Property(e => e.Bairro).IsUnicode(false);
 
@@ -62,7 +62,7 @@ namespace backend.Models
             modelBuilder.Entity<Oferta>(entity =>
             {
                 entity.HasKey(e => e.IdOferta)
-                    .HasName("PK__Oferta__6C9F2EA00A3C1574");
+                    .HasName("PK__Oferta__6C9F2EA08AF8FB8A");
 
                 entity.Property(e => e.Preco).IsUnicode(false);
 
@@ -80,7 +80,7 @@ namespace backend.Models
             modelBuilder.Entity<Pedido>(entity =>
             {
                 entity.HasKey(e => e.IdPedido)
-                    .HasName("PK__Pedido__A5D0013934445DDB");
+                    .HasName("PK__Pedido__A5D00139A552F18B");
 
                 entity.HasOne(d => d.IdProdutoNavigation)
                     .WithMany(p => p.Pedido)
@@ -96,7 +96,7 @@ namespace backend.Models
             modelBuilder.Entity<Produto>(entity =>
             {
                 entity.HasKey(e => e.IdProduto)
-                    .HasName("PK__Produto__94E704D8BFD75BE7");
+                    .HasName("PK__Produto__94E704D84BC1F399");
 
                 entity.Property(e => e.Nome).IsUnicode(false);
 
@@ -111,7 +111,7 @@ namespace backend.Models
             modelBuilder.Entity<ProdutoReceita>(entity =>
             {
                 entity.HasKey(e => e.IdProdutoReceita)
-                    .HasName("PK__Produto___ADAB9BA8EDE981E0");
+                    .HasName("PK__Produto___ADAB9BA8E0C83372");
 
                 entity.HasOne(d => d.IdProdutoNavigation)
                     .WithMany(p => p.ProdutoReceita)
@@ -127,7 +127,7 @@ namespace backend.Models
             modelBuilder.Entity<Receita>(entity =>
             {
                 entity.HasKey(e => e.IdReceita)
-                    .HasName("PK__Receita__22C96730898C1A1F");
+                    .HasName("PK__Receita__22C967303FE5F4E6");
 
                 entity.Property(e => e.Nome).IsUnicode(false);
             });
@@ -135,7 +135,7 @@ namespace backend.Models
             modelBuilder.Entity<TipoUsuario>(entity =>
             {
                 entity.HasKey(e => e.IdTipoUsuario)
-                    .HasName("PK__Tipo_Usu__689D5FEAFDD9FF4C");
+                    .HasName("PK__Tipo_Usu__689D5FEA9B339C44");
 
                 entity.Property(e => e.Tipo).IsUnicode(false);
             });
@@ -143,7 +143,7 @@ namespace backend.Models
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.HasKey(e => e.IdUsuario)
-                    .HasName("PK__Usuario__63C76BE270984B7C");
+                    .HasName("PK__Usuario__63C76BE2ECDF8120");
 
                 entity.Property(e => e.Celular).IsUnicode(false);
 

@@ -25,6 +25,7 @@ namespace backend.Models
         [Required]
         [StringLength(2)]
         public string Estado { get; set; }
+        [Required]
         [Column("CEP")]
         [StringLength(9)]
         public string Cep { get; set; }

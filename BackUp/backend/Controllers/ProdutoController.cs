@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using backend.Models;
+using backend.Domains;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ namespace backend.Controllers {
         /// </summary>
         /// <returns>Lista de Produtos</returns>
         [HttpGet]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<List<Produto>>> Get () {
 
             var produtos = await _contexto.Produto.Include("IdCatProdutoNavigation").ToListAsync();
@@ -32,6 +34,7 @@ namespace backend.Controllers {
         /// <param name="id"></param>
         /// <returns>Pegamos um unico ID de produto</returns>
         [HttpGet ("{id}")]
+        [Authorize(Roles = "3")]
         public async Task<ActionResult<Produto>> Get(int id){
             var produto = await _contexto.Produto.Include("IdCatProdutoNavigation").FirstOrDefaultAsync (e => e.IdProduto == id);
 
@@ -47,6 +50,8 @@ namespace backend.Controllers {
         /// <param name="produto"></param>
         /// <returns>Envia dados de produto</returns>
         [HttpPost]
+        [Authorize(Roles = "3")]
+        [Authorize(Roles = "2")]
         public async Task<ActionResult<Produto>> Post (Produto produto){
             try{
                 await _contexto.AddAsync (produto);
@@ -67,6 +72,8 @@ namespace backend.Controllers {
         /// <param name="produto"></param>
         /// <returns>Alteração de produto</returns>
         [HttpPut ("{id}")]
+        [Authorize(Roles = "3")]
+        [Authorize(Roles = "2")]
         public async Task<ActionResult> Put (int id, Produto produto){
             if(id != produto.IdProduto){
                 
@@ -93,6 +100,8 @@ namespace backend.Controllers {
          /// <param name="id"></param>
          /// <returns>Exclui produto</returns>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "3")]
+        [Authorize(Roles = "2")]
         public async Task<ActionResult<Produto>> Delete(int id){
 
             var produto = await _contexto.Produto.FindAsync(id);
