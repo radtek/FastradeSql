@@ -12,10 +12,7 @@
        
         public string Upload (IFormFile arquivo, string savingFolder) {
                
-            if(savingFolder == null) {
-                savingFolder = Path.Combine ("imgUpdated");                
-            }
-
+               
             var pathToSave = Path.Combine (Directory.GetCurrentDirectory (), savingFolder);
 
             if (arquivo.Length > 0) {

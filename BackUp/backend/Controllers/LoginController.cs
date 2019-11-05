@@ -47,8 +47,8 @@ namespace backend.Controllers {
                 new Claim (JwtRegisteredClaimNames.Email, userInfo.Email),
                 new Claim (JwtRegisteredClaimNames.Jti, Guid.NewGuid ().ToString ()),
                 //Define uma Claim atribuindo o perfil do usuário pelo Tipo de usuario
-
-                new Claim (ClaimTypes.Role, userInfo.IdTipoUsuario.ToString ())
+                new Claim (ClaimTypes.Role, userInfo.IdTipoUsuario.ToString ()),
+                new Claim ("Role", userInfo.IdTipoUsuario.ToString ())
 
             };
 

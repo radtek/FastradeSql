@@ -25,7 +25,13 @@
                 if (usuarios == null) {
                     return NotFound();
                 }
+
+                // usuario.EmaiL = null;
+                // usuarios.Senha = null;
+
+                
                 return usuarios;
+
             }
             //Get: Api/Produtoreceita
             /// <summary>
