@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using backend.Domains;
+using backend.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,9 @@ namespace backend.Controllers {
     public class ReceitaController : ControllerBase {
         fastradeContext _contexto = new fastradeContext ();
 
+        ReceitaRepository _repositorio = new ReceitaRepository ();
+
+
         //Get: Api/Receita
         /// <summary>
         /// Aqui são todas as receitas
@@ -20,7 +24,7 @@ namespace backend.Controllers {
         [Authorize(Roles = "3")]
         public async Task<ActionResult<List<Receita>>> Get () {
 
-            var receitas = await _contexto.Receita.ToListAsync ();
+            var receitas = await _repositorio.Listar ();
 
             if (receitas == null) {
                 return NotFound();
@@ -37,7 +41,7 @@ namespace backend.Controllers {
         [Authorize(Roles = "3")]
 
         public async Task<ActionResult<Receita>> Get(int id){
-            var receita = await _contexto.Receita.FindAsync (id);
+            var receita = await _repositorio.BuscarPorID (id);
 
             if (receita == null){
                 return NotFound ();
@@ -54,10 +58,8 @@ namespace backend.Controllers {
         [Authorize(Roles = "3")]
         public async Task<ActionResult<Receita>> Post (Receita receita){
             try{
-                await _contexto.AddAsync (receita);
-
-                await _contexto.SaveChangesAsync();
                 
+                await _repositorio.Salvar(receita);
 
                 }catch (DbUpdateConcurrencyException){
                     throw;
@@ -80,9 +82,9 @@ namespace backend.Controllers {
             }
             _contexto.Entry (receita).State = EntityState.Modified;
             try{
-                await _contexto.SaveChangesAsync ();
+                await _repositorio.Alterar(receita);
             }catch (DbUpdateConcurrencyException){
-                var receita_valido = await _contexto.Receita.FindAsync (id);
+                var receita_valido = await _repositorio.BuscarPorID(id);
 
                 if(receita_valido == null) {
                     return NotFound ();
@@ -102,13 +104,12 @@ namespace backend.Controllers {
         [Authorize(Roles = "3")]
         public async Task<ActionResult<Receita>> Delete(int id){
 
-            var receita = await _contexto.Receita.FindAsync(id);
+            var receita = await _repositorio.BuscarPorID(id);
             if(receita == null){
                 return NotFound();
             }
 
-            _contexto.Receita.Remove(receita);
-            await _contexto.SaveChangesAsync();
+            await _repositorio.Excluir(receita);
 
             return receita;
         }  

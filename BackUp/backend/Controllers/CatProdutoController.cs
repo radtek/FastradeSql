@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using backend.Domains;
+using backend.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,19 +12,21 @@ namespace backend.Controllers {
     public class CatProdutoController : ControllerBase {
         fastradeContext _contexto = new fastradeContext ();
 
+        CatProdutoRepository _repositorio = new CatProdutoRepository ();
+
         //Get: Api/Catproduto
         /// <summary>
         /// Aqui é todas Categorias dos produtos
         /// </summary>
         /// <returns>Lista de categorias de produtos</returns>
         [HttpGet]
-        [Authorize(Roles = "3")]
+        [Authorize (Roles = "3")]
         public async Task<ActionResult<List<CatProduto>>> Get () {
 
-            var catprodutos = await _contexto.CatProduto.ToListAsync ();
+            var catprodutos = await _repositorio.Listar ();
 
             if (catprodutos == null) {
-                return NotFound();
+                return NotFound ();
             }
             return catprodutos;
         }
@@ -34,11 +37,11 @@ namespace backend.Controllers {
         /// <param name="id"></param>
         /// <returns>Unico Id de categoria produtos</returns>
         [HttpGet ("{id}")]
-        [Authorize(Roles = "3")]
-        public async Task<ActionResult<CatProduto>> Get(int id){
-            var catproduto = await _contexto.CatProduto.FindAsync (id);
+        [Authorize (Roles = "3")]
+        public async Task<ActionResult<CatProduto>> Get (int id) {
+            var catproduto = await _repositorio.BuscarPorID (id);
 
-            if (catproduto == null){
+            if (catproduto == null) {
                 return NotFound ();
             }
             return catproduto;
@@ -50,16 +53,13 @@ namespace backend.Controllers {
         /// <param name="catproduto"></param>
         /// <returns>Envia uma categoria produto</returns>
         [HttpPost]
-        [Authorize(Roles = "3")]
-        public async Task<ActionResult<CatProduto>> Post (CatProduto catproduto){
-            try{
-                await _contexto.AddAsync (catproduto);
+        [Authorize (Roles = "3")]
+        public async Task<ActionResult<CatProduto>> Post (CatProduto catproduto) {
+            try {
+                await _repositorio.Salvar (catproduto);
 
-                await _contexto.SaveChangesAsync();
-                
-
-                }catch (DbUpdateConcurrencyException){
-                    throw;
+            } catch (DbUpdateConcurrencyException) {
+                throw;
             }
             return catproduto;
         }
@@ -71,45 +71,44 @@ namespace backend.Controllers {
         /// <param name="catproduto"></param>
         /// <returns>Alteramento de categoria produto</returns>
         [HttpPut ("{id}")]
-        [Authorize(Roles = "3")]
-        public async Task<ActionResult> Put (int id, CatProduto catproduto){
-            if(id != catproduto.IdCatProduto){
-                
+        [Authorize (Roles = "3")]
+        public async Task<ActionResult> Put (int id, CatProduto catproduto) {
+            if (id != catproduto.IdCatProduto) {
+
                 return BadRequest ();
             }
             _contexto.Entry (catproduto).State = EntityState.Modified;
-            try{
-                await _contexto.SaveChangesAsync ();
-            }catch (DbUpdateConcurrencyException){
-                var catproduto_valido = await _contexto.CatProduto.FindAsync (id);
+            try {
+                await _repositorio.Alterar (catproduto);
+            } catch (DbUpdateConcurrencyException) {
+                var catproduto_valido = await _repositorio.BuscarPorID (id);
 
-                if(catproduto_valido == null) {
+                if (catproduto_valido == null) {
                     return NotFound ();
-                }else{
+                } else {
                     throw;
                 }
             }
-            return NoContent();
+            return NoContent ();
         }
-         // DELETE api/CatProduto/id
-         /// <summary>
-         /// Aqui deletamos uma categoria de produto
-         /// </summary>
-         /// <param name="id"></param>
-         /// <returns>Deleta uma categoria</returns>
-        [HttpDelete("{id}")]
-        [Authorize(Roles = "3")]
-        public async Task<ActionResult<CatProduto>> Delete(int id){
+        // DELETE api/CatProduto/id
+        /// <summary>
+        /// Aqui deletamos uma categoria de produto
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Deleta uma categoria</returns>
+        [HttpDelete ("{id}")]
+        [Authorize (Roles = "3")]
+        public async Task<ActionResult<CatProduto>> Delete (int id) {
 
-            var catproduto = await _contexto.CatProduto.FindAsync(id);
-            if(catproduto == null){
-                return NotFound();
+            var catproduto = await _repositorio.BuscarPorID (id);
+            if (catproduto == null) {
+                return NotFound ();
             }
 
-            _contexto.CatProduto.Remove(catproduto);
-            await _contexto.SaveChangesAsync();
+            await _repositorio.Excluir (catproduto);
 
             return catproduto;
-        }  
+        }
     }
-}   
+}

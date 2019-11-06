@@ -16,7 +16,7 @@ namespace backend.Controllers {
     [ApiController]
     public class LoginController : ControllerBase {
         // Chamamos nosso contexto do banco
-        fastradeContext _context = new fastradeContext ();
+        fastradeContext _contexto = new fastradeContext ();
 
         // Definimos uma variável para percorrer nossos métodos com as configurações obtidas no appsettings.json
         private IConfiguration _config;
@@ -28,7 +28,7 @@ namespace backend.Controllers {
 
         // Chamamos nosso método para validar nosso usuário da aplicação
         public Usuario AuthenticateUser (LoginViewModel login) {
-            var usuario = _context.Usuario.FirstOrDefault (u => u.Email == login.Email && u.Senha == login.Senha);
+            var usuario = _contexto.Usuario.FirstOrDefault (u => u.Email == login.Email && u.Senha == login.Senha);
 
             return usuario;
 

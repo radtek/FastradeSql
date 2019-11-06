@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using backend.Domains;
+using backend.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,8 @@ namespace backend.Controllers {
     public class PedidoController : ControllerBase {
 
         fastradeContext _contexto = new fastradeContext ();
- 
+
+        PedidoRepository _repositorio = new PedidoRepository ();
 
         //GET: api/Pedido
         /// <summary>
@@ -23,11 +25,11 @@ namespace backend.Controllers {
         /// </summary>
         /// <returns>Lista de pedidos</returns>
         [HttpGet]
-        [Authorize(Roles = "3")]
+        [Authorize (Roles = "3")]
         public async Task<ActionResult<List<Pedido>>> Get () {
 
             //Include ("") = Adiciona o 
-            var pedidos = await _contexto.Pedido.Include ("IdProdutoNavigation").Include("IdUsuarioNavigation").ToListAsync();
+            var pedidos = await _repositorio.Listar();
 
             if (pedidos == null) {
                 return NotFound ();
@@ -44,17 +46,17 @@ namespace backend.Controllers {
         /// <param name="id"></param>
         /// <returns>Unico ID de pedido</returns>
         [HttpGet ("{id}")]
-        [Authorize(Roles = "3")]
+        [Authorize (Roles = "3")]
         public async Task<ActionResult<Pedido>> Get (int id) {
 
             // FindAsync = procura algo especifico no banco 
-            var pedidos = await _contexto.Pedido.Include("IdProdutoNavigation").Include("IdUsuarioNavigation").FirstOrDefaultAsync(e => e.IdPedido == id);
+            var pedido = await _repositorio.BuscarPorID(id);
 
-            if (pedidos == null) {
+            if (pedido == null) {
                 return NotFound ();
             }
 
-            return pedidos;
+            return pedido;
 
         }
 
@@ -69,10 +71,7 @@ namespace backend.Controllers {
         public async Task<ActionResult<Pedido>> Post (Pedido pedido) {
 
             try {
-                //Tratamos contra ataques de SQL Injection
-                await _contexto.AddAsync (pedido);
-                //Salvamos efetivamente nosso objeto do banco
-                await _contexto.SaveChangesAsync ();
+              await _repositorio.Salvar(pedido);
             } catch (DbUpdateConcurrencyException) {
                 throw;
             }
@@ -98,11 +97,11 @@ namespace backend.Controllers {
             _contexto.Entry (pedido).State = EntityState.Modified;
 
             try {
-                await _contexto.SaveChangesAsync ();
+                    await _repositorio.Alterar(pedido);
             } catch (DbUpdateConcurrencyException) {
 
                 //Verificamos se o objeto inserido realmente existe no banco
-                var pedido_valido = await _contexto.Pedido.FindAsync (id);
+                var pedido_valido = await _repositorio.BuscarPorID(id);
 
                 if (pedido_valido == null) {
                     return NotFound ();
@@ -126,14 +125,13 @@ namespace backend.Controllers {
         [Authorize]
         public async Task<ActionResult<Pedido>> Delete (int id) {
 
-            var pedido = await _contexto.Pedido.FindAsync (id);
+            var pedido = await _repositorio.BuscarPorID(id);
             if (pedido == null) {
                 return NotFound ();
             }
 
-            _contexto.Pedido.Remove (pedido);
-            await _contexto.SaveChangesAsync ();
-
+            await _repositorio.Excluir(pedido);
+            
             return pedido;
         }
     }
