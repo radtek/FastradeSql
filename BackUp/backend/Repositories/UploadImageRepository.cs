@@ -1,18 +1,11 @@
- using System.Collections.Generic;
- using System.IO;
- using System.Linq;
- using System.Net.Http.Headers;
- using System.Threading.Tasks;
- using System;
- using Microsoft.AspNetCore.Http;
- using Microsoft.AspNetCore.Mvc;
+using System.IO;
+using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Http;
 
- namespace UploadControllers {
-     public class UploadController : ControllerBase {
-       
+namespace backend.Repositories {
+    public class UploadImageRepository  {
         public string Upload (IFormFile arquivo, string savingFolder) {
-               
-               
+
             var pathToSave = Path.Combine (Directory.GetCurrentDirectory (), savingFolder);
 
             if (arquivo.Length > 0) {
@@ -21,12 +14,12 @@
 
                 using (var stream = new FileStream (fullPath, FileMode.Create)) {
                     arquivo.CopyTo (stream);
-                }                    
+                }
 
                 return fullPath;
             } else {
                 return null;
-            }           
+            }
         }
     }
 }

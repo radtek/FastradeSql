@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using backend.Domains;
+using backend.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,8 @@ namespace backend.Controllers {
     public class ProdutoController : ControllerBase {
         fastradeContext _contexto = new fastradeContext ();
 
+        ProdutoRepository _repositorio = new ProdutoRepository();
+
         //Get: Api/Produtoreceita
         /// <summary>
         /// Aqui são todos os produtos
@@ -20,7 +23,7 @@ namespace backend.Controllers {
         [Authorize(Roles = "3")]
         public async Task<ActionResult<List<Produto>>> Get () {
 
-            var produtos = await _contexto.Produto.Include("IdCatProdutoNavigation").ToListAsync();
+            var produtos = await _repositorio.Listar();
 
             if (produtos == null) {
                 return NotFound();
@@ -36,7 +39,7 @@ namespace backend.Controllers {
         [HttpGet ("{id}")]
         [Authorize(Roles = "3")]
         public async Task<ActionResult<Produto>> Get(int id){
-            var produto = await _contexto.Produto.Include("IdCatProdutoNavigation").FirstOrDefaultAsync (e => e.IdProduto == id);
+            var produto = await _repositorio.BuscarPorID(id);
 
             if (produto == null){
                 return NotFound ();
@@ -54,9 +57,7 @@ namespace backend.Controllers {
         [Authorize(Roles = "2")]
         public async Task<ActionResult<Produto>> Post (Produto produto){
             try{
-                await _contexto.AddAsync (produto);
-
-                await _contexto.SaveChangesAsync();
+                await _repositorio.Salvar(produto);
                 
 
                 }catch (DbUpdateConcurrencyException){
@@ -81,9 +82,9 @@ namespace backend.Controllers {
             }
             _contexto.Entry (produto).State = EntityState.Modified;
             try{
-                await _contexto.SaveChangesAsync ();
+                await _repositorio.Alterar (produto);
             }catch (DbUpdateConcurrencyException){
-                var produto_valido = await _contexto.Produto.FindAsync (id);
+                var produto_valido = await _repositorio.BuscarPorID(id);
 
                 if(produto_valido == null) {
                     return NotFound ();
@@ -104,13 +105,12 @@ namespace backend.Controllers {
         [Authorize(Roles = "2")]
         public async Task<ActionResult<Produto>> Delete(int id){
 
-            var produto = await _contexto.Produto.FindAsync(id);
+            var produto = await _repositorio.BuscarPorID(id);
             if(produto == null){
                 return NotFound();
             }
 
-            _contexto.Produto.Remove(produto);
-            await _contexto.SaveChangesAsync();
+            await _repositorio.Excluir(produto);
 
             return produto;
         }  

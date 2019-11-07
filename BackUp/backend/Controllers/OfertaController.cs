@@ -8,7 +8,6 @@ using backend.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using UploadControllers;
 
 namespace backend.Controllers {
     [Route ("api/[controller]")]
@@ -17,9 +16,9 @@ namespace backend.Controllers {
 
         fastradeContext _contexto = new fastradeContext ();
 
-        UploadController _Upload = new UploadController ();
-
         OfertaRepository _repositorio = new OfertaRepository ();
+
+        UploadImageRepository _Upload = new UploadImageRepository ();
 
         //Get: Api/Oferta
         /// <summary>
@@ -27,9 +26,9 @@ namespace backend.Controllers {
         /// </summary>
         /// <returns>Lista de Ofertas</returns>
         [HttpGet]
-        [Authorize (Roles = "3")]
+        // [Authorize (Roles = "3")]
         public async Task<ActionResult<List<Oferta>>> Get () {
-            var oferta = await _repositorio.Listar();
+            var oferta = await _repositorio.Listar ();
             if (oferta == null) {
                 return NotFound ();
             }
@@ -44,7 +43,7 @@ namespace backend.Controllers {
         [HttpGet ("{id}")]
         [Authorize (Roles = "3")]
         public async Task<ActionResult<Oferta>> Get (int id) {
-            var oferta = await _repositorio.BuscarPorID(id);
+            var oferta = await _repositorio.BuscarPorID (id);
 
             if (oferta == null) {
                 return NotFound ();
@@ -62,14 +61,15 @@ namespace backend.Controllers {
         // [Authorize(Roles = "2")]
         public async Task<ActionResult<Oferta>> Post ([FromForm] Oferta oferta) {
             try {
+                //Cadastro de oferta com imagem
                 var arquivo = Request.Form.Files[0];
                 oferta.IdProduto = Convert.ToInt32 (Request.Form["IdProduto"]);
-                oferta.FotoUrlOferta = _Upload.Upload (arquivo, "Resources");
                 oferta.IdUsuario = Convert.ToInt32 (Request.Form["IdUsuario"]);
                 oferta.Quantidade = Convert.ToInt32 (Request.Form["Quantidade"]);
                 oferta.Preco = Request.Form["Preco"];
+                oferta.FotoUrlOferta = _Upload.Upload (arquivo, "Resources");             
 
-                await _repositorio.Salvar(oferta);
+                await _repositorio.Salvar (oferta);
 
             } catch (DbUpdateConcurrencyException) {
                 throw;
@@ -93,7 +93,14 @@ namespace backend.Controllers {
             }
             _contexto.Entry (oferta).State = EntityState.Modified;
             try {
-                await _repositorio.Alterar(oferta);
+                var arquivo = Request.Form.Files[0];
+                oferta.IdProduto = Convert.ToInt32 (Request.Form["IdProduto"]);
+                oferta.IdUsuario = Convert.ToInt32 (Request.Form["IdUsuario"]);
+                oferta.Quantidade = Convert.ToInt32 (Request.Form["Quantidade"]);
+                oferta.Preco = Request.Form["Preco"];
+                oferta.FotoUrlOferta = _Upload.Upload (arquivo, "Resources");
+
+                await _repositorio.Alterar (oferta);
             } catch (DbUpdateConcurrencyException) {
                 var oferta_valido = await _repositorio.BuscarPorID (id);
 

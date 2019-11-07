@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using backend.Domains;
+using backend.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,8 @@ namespace backend.Controllers {
     public class ProdutoReceitaController : ControllerBase {
         fastradeContext _contexto = new fastradeContext ();
 
+        ProdutoReceitaRepository _repositorio = new ProdutoReceitaRepository ();
+
         //Get: Api/Produtoreceita
         /// <summary>
         /// Aqui são todos os produtos de uma receita
@@ -20,7 +23,7 @@ namespace backend.Controllers {
         [Authorize(Roles = "3")]
         public async Task<ActionResult<List<ProdutoReceita>>> Get () {
 
-            var produtoreceitas = await _contexto.ProdutoReceita.Include("IdProdutoNavigation").Include("IdReceitaNavigation").ToListAsync();
+            var produtoreceitas = await _repositorio.Listar();
 
             if (produtoreceitas == null) {
                 return NotFound();
@@ -36,7 +39,7 @@ namespace backend.Controllers {
         [HttpGet ("{id}")]
         [Authorize(Roles = "3")]
         public async Task<ActionResult<ProdutoReceita>> Get(int id){
-            var produtoreceita = await _contexto.ProdutoReceita.Include("IdProdutoNavigation").Include("IdReceitaNavigation").FirstOrDefaultAsync (e => e.IdProdutoReceita == id);
+            var produtoreceita = await _repositorio.BuscarPorID(id);
 
             if (produtoreceita == null){
                 return NotFound ();
@@ -53,11 +56,8 @@ namespace backend.Controllers {
         [Authorize(Roles = "3")]
         public async Task<ActionResult<ProdutoReceita>> Post (ProdutoReceita produtoreceita){
             try{
-                await _contexto.AddAsync (produtoreceita);
-
-                await _contexto.SaveChangesAsync();
+               await _repositorio.Salvar(produtoreceita);
                 
-
                 }catch (DbUpdateConcurrencyException){
                     throw;
             }
@@ -79,9 +79,9 @@ namespace backend.Controllers {
             }
             _contexto.Entry (produtoreceita).State = EntityState.Modified;
             try{
-                await _contexto.SaveChangesAsync ();
+                await _repositorio.Alterar(produtoreceita);
             }catch (DbUpdateConcurrencyException){
-                var produtoreceita_valido = await _contexto.ProdutoReceita.FindAsync (id);
+                var produtoreceita_valido = await _repositorio.BuscarPorID(id);
 
                 if(produtoreceita_valido == null) {
                     return NotFound ();
@@ -101,13 +101,13 @@ namespace backend.Controllers {
         [Authorize(Roles = "3")]
         public async Task<ActionResult<ProdutoReceita>> Delete(int id){
 
-            var produtoreceita = await _contexto.ProdutoReceita.FindAsync(id);
+            var produtoreceita = await _repositorio.BuscarPorID(id);
             if(produtoreceita == null){
                 return NotFound();
             }
 
-            _contexto.ProdutoReceita.Remove(produtoreceita);
-            await _contexto.SaveChangesAsync();
+           
+            await _repositorio.Excluir(produtoreceita);
 
             return produtoreceita;
         }  
