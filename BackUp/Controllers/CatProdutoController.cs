@@ -20,7 +20,7 @@ namespace backend.Controllers {
         /// </summary>
         /// <returns>Lista de categorias de produtos</returns>
         [HttpGet]
-        [Authorize (Roles = "3")]
+        // [Authorize (Roles = "3")]
         public async Task<ActionResult<List<CatProduto>>> Get () {
 
             var catprodutos = await _repositorio.Listar ();
@@ -71,7 +71,7 @@ namespace backend.Controllers {
         /// <param name="catproduto"></param>
         /// <returns>Alteramento de categoria produto</returns>
         [HttpPut ("{id}")]
-        [Authorize (Roles = "3")]
+        // [Authorize (Roles = "3")]
         public async Task<ActionResult> Put (int id, CatProduto catproduto) {
             if (id != catproduto.IdCatProduto) {
 

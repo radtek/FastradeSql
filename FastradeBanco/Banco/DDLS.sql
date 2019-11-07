@@ -1,5 +1,6 @@
 /*DDLS*/
 CREATE DATABASE fastrade;
+DROP DATABASE fastrade;
 
 USE fastrade;
 
@@ -47,7 +48,7 @@ CPF_CNPJ VARCHAR(14) NOT NULL,
 Email VARCHAR(255) NOT NULL,
 Senha VARCHAR(255) NOT NULL,
 Celular VARCHAR (255) NOT NULL,
-Foto_Url_Usuario  TEXT NOT NULL
+Foto_Url_Usuario  TEXT
 );
 CREATE TABLE Pedido(
 Id_Pedido INT IDENTITY PRIMARY KEY NOT NULL,
