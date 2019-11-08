@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using backend.Domains;
 using backend.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -61,10 +62,8 @@ namespace backend.Controllers {
         /// <returns>Envia dados de um usuario</returns>
         [HttpPost]
         // [Authorize (Roles = "3")]
-        public async Task<ActionResult<Usuario>> Post ([FromForm]Usuario usuario) {
+        public async Task<ActionResult<Usuario>> Post ([FromForm] Usuario usuario) {
             try {
-
-                var arquivo = Request.Form.Files[0];
                 usuario.IdEndereco = Convert.ToInt32 (Request.Form["IdEndereco"]);
                 usuario.IdTipoUsuario = Convert.ToInt32 (Request.Form["IdTipoUsuario"]);
                 usuario.NomeRazaoSocial = Request.Form["NomeRazaoSocial"];
@@ -72,9 +71,20 @@ namespace backend.Controllers {
                 usuario.Email = Request.Form["Email"];
                 usuario.Senha = Request.Form["Senha"];
                 usuario.Celular = Request.Form["Celular"];
-                usuario.FotoUrlUsuario = _Upload.Upload (arquivo, "ResourceImage");
 
                 await _Repositorio.Salvar (usuario);
+
+                try {
+                    var arquivo = Request.Form.Files[0];
+                    if (arquivo != null) {
+                        // Entrar aqui se o usuario enviar uma imagem no form.
+                        usuario.FotoUrlUsuario = _Upload.Upload (arquivo, "Usuarios");
+                    }
+                } catch {
+                    IFormFile arquivo = null;
+                    usuario.FotoUrlUsuario = _Upload.Upload(arquivo, "Usuarios");
+                }
+
             } catch (DbUpdateConcurrencyException) {
                 throw;
             }
@@ -105,7 +115,7 @@ namespace backend.Controllers {
                 usuario.Email = Request.Form["Email"];
                 usuario.Senha = Request.Form["Senha"];
                 usuario.Celular = Request.Form["Celular"];
-                usuario.FotoUrlUsuario = _Upload.Upload (arquivo, "ResourcesFotoUsuario");
+                usuario.FotoUrlUsuario = _Upload.Upload (arquivo, "Usuarios");
                 await _Repositorio.Alterar (usuario);
             } catch (DbUpdateConcurrencyException) {
                 var usuario_valido = await _Repositorio.BuscarPorID (id);
@@ -125,7 +135,7 @@ namespace backend.Controllers {
         /// <param name="id"></param>
         /// <returns>Excluir dados de um usuario</returns>
         [HttpDelete ("{id}")]
-        [Authorize (Roles = "3")]
+        // [Authorize (Roles = "3")]
         public async Task<ActionResult<Usuario>> Delete (int id) {
 
             var usuario = await _Repositorio.BuscarPorID (id);

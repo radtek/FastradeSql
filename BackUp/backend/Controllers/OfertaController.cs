@@ -67,7 +67,7 @@ namespace backend.Controllers {
                 oferta.IdUsuario = Convert.ToInt32 (Request.Form["IdUsuario"]);
                 oferta.Quantidade = Convert.ToInt32 (Request.Form["Quantidade"]);
                 oferta.Preco = Request.Form["Preco"];
-                oferta.FotoUrlOferta = _Upload.Upload (arquivo, "Resources");             
+                oferta.FotoUrlOferta = _Upload.Upload (arquivo, "Ofertas");             
 
                 await _repositorio.Salvar (oferta);
 
@@ -98,7 +98,7 @@ namespace backend.Controllers {
                 oferta.IdUsuario = Convert.ToInt32 (Request.Form["IdUsuario"]);
                 oferta.Quantidade = Convert.ToInt32 (Request.Form["Quantidade"]);
                 oferta.Preco = Request.Form["Preco"];
-                oferta.FotoUrlOferta = _Upload.Upload (arquivo, "Resources");
+                oferta.FotoUrlOferta = _Upload.Upload (arquivo, "Ofertas");
 
                 await _repositorio.Alterar (oferta);
             } catch (DbUpdateConcurrencyException) {

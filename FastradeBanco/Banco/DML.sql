@@ -14,7 +14,7 @@ INSERT INTO Cat_Produto(Tipo) VALUES ('Conserva')
 
 INSERT INTO Cat_Produto(Tipo) VALUES ('Bebidas')
 
-INSERT INTO Produto(Id_Cat_Produto, Nome, Validade) VALUES (1, 'Feijão', '22/11/2022')
+INSERT INTO Produto(Id_Cat_Produto, Nome) VALUES (1, 'Feijão')
 
 INSERT INTO Receita(Nome) VALUES ('Limão')
 
@@ -30,4 +30,4 @@ INSERT INTO Usuario(Id_Endereco, Id_Tipo_Usuario, Nome_Razao_Social, Email, Senh
 
 INSERT INTO Pedido(Id_Produto, Id_Usuario, Quantidade) VALUES (1, 1, 20)
 
-INSERT INTO Oferta(Id_Produto, Id_Usuario, Quantidade, Preco, Foto_Url_Oferta) VALUES (1, 1, 50, '4,99', 'Url_Imagens_Texto')
+INSERT INTO Oferta(Id_Produto, Id_Usuario, Quantidade, Preco, Foto_Url_Oferta, Validade) VALUES (1, 1, 50, '4,99', 'Url_Imagens_Texto', '22/11/2022')

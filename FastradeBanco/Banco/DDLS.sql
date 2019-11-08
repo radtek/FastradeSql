@@ -27,8 +27,7 @@ Tipo VARCHAR(255),
 CREATE TABLE Produto(
 Id_Produto INT IDENTITY PRIMARY KEY NOT NULL,
 Id_Cat_Produto INT FOREIGN KEY REFERENCES Cat_Produto(Id_Cat_Produto),
-Nome VARCHAR (255) NOT NULL,
-Validade VARCHAR(255) NOT NULL
+Nome VARCHAR (255) NOT NULL
 );
 CREATE TABLE Receita(
 Id_Receita INT IDENTITY PRIMARY KEY NOT NULL,
@@ -62,7 +61,8 @@ Id_Produto     INT FOREIGN KEY REFERENCES Produto(Id_Produto),
 Id_Usuario     INT FOREIGN KEY REFERENCES Usuario(Id_Usuario),
 Quantidade INT NOT NULL,
 Preco VARCHAR(255) NOT NULL,
-Foto_Url_Oferta TEXT NOT NULL
+Foto_Url_Oferta TEXT NOT NULL,
+Validade DATE
 );
 
 
