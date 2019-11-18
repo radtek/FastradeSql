@@ -45,7 +45,7 @@ namespace backend.Controllers {
         /// <param name="id"></param>
         /// <returns>Unico ID de um usuario</returns>
         [HttpGet ("{id}")]
-        [Authorize (Roles = "3")]
+        // [Authorize (Roles = "3")]
         public async Task<ActionResult<Usuario>> Get (int id) {
             var usuario = await _Repositorio.BuscarPorID (id);
 
@@ -63,7 +63,7 @@ namespace backend.Controllers {
         [HttpPost]
         // [Authorize (Roles = "3")]
         public async Task<ActionResult<Usuario>> Post ([FromForm] Usuario usuario) {
-            try {
+            try { 
                 usuario.IdEndereco = Convert.ToInt32 (Request.Form["IdEndereco"]);
                 usuario.IdTipoUsuario = Convert.ToInt32 (Request.Form["IdTipoUsuario"]);
                 usuario.NomeRazaoSocial = Request.Form["NomeRazaoSocial"];
@@ -71,8 +71,6 @@ namespace backend.Controllers {
                 usuario.Email = Request.Form["Email"];
                 usuario.Senha = Request.Form["Senha"];
                 usuario.Celular = Request.Form["Celular"];
-
-                await _Repositorio.Salvar (usuario);
 
                 try {
                     var arquivo = Request.Form.Files[0];
@@ -82,8 +80,9 @@ namespace backend.Controllers {
                     }
                 } catch {
                     IFormFile arquivo = null;
-                    usuario.FotoUrlUsuario = _Upload.Upload(arquivo, "Usuarios");
+                    usuario.FotoUrlUsuario = _Upload.Upload (arquivo, "Usuarios");
                 }
+                await _Repositorio.Salvar (usuario);
 
             } catch (DbUpdateConcurrencyException) {
                 throw;
@@ -98,7 +97,6 @@ namespace backend.Controllers {
         /// <param name="usuario"></param>
         /// <returns>Envia dados de um usuario</returns>
         [HttpPut ("{id}")]
-        // [Authorize]
         public async Task<ActionResult> Put (int id, Usuario usuario) {
             if (id != usuario.IdUsuario) {
 
