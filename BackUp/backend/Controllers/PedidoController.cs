@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using backend.Domains;
@@ -29,7 +30,7 @@ namespace backend.Controllers {
         public async Task<ActionResult<List<Pedido>>> Get () {
 
             //Include ("") = Adiciona o 
-            var pedidos = await _repositorio.Listar();
+            var pedidos = await _repositorio.Listar ();
 
             if (pedidos == null) {
                 return NotFound ();
@@ -50,7 +51,7 @@ namespace backend.Controllers {
         public async Task<ActionResult<Pedido>> Get (int id) {
 
             // FindAsync = procura algo especifico no banco 
-            var pedido = await _repositorio.BuscarPorID(id);
+            var pedido = await _repositorio.BuscarPorID (id);
 
             if (pedido == null) {
                 return NotFound ();
@@ -67,11 +68,13 @@ namespace backend.Controllers {
         /// <param name="pedido"></param>
         /// <returns>Envia dados de pedido</returns>
         [HttpPost]
-        [Authorize]
+        // [Authorize]
         public async Task<ActionResult<Pedido>> Post (Pedido pedido) {
 
             try {
-              await _repositorio.Salvar(pedido);
+                
+                await _repositorio.Salvar (pedido);
+
             } catch (DbUpdateConcurrencyException) {
                 throw;
             }
@@ -97,11 +100,11 @@ namespace backend.Controllers {
             _contexto.Entry (pedido).State = EntityState.Modified;
 
             try {
-                    await _repositorio.Alterar(pedido);
+                await _repositorio.Alterar (pedido);
             } catch (DbUpdateConcurrencyException) {
 
                 //Verificamos se o objeto inserido realmente existe no banco
-                var pedido_valido = await _repositorio.BuscarPorID(id);
+                var pedido_valido = await _repositorio.BuscarPorID (id);
 
                 if (pedido_valido == null) {
                     return NotFound ();
@@ -125,13 +128,13 @@ namespace backend.Controllers {
         [Authorize]
         public async Task<ActionResult<Pedido>> Delete (int id) {
 
-            var pedido = await _repositorio.BuscarPorID(id);
+            var pedido = await _repositorio.BuscarPorID (id);
             if (pedido == null) {
                 return NotFound ();
             }
 
-            await _repositorio.Excluir(pedido);
-            
+            await _repositorio.Excluir (pedido);
+
             return pedido;
         }
     }

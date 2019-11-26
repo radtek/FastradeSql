@@ -29,7 +29,7 @@ namespace backend.Domains
         {
             if (!optionsBuilder.IsConfigured)
             {
-                 optionsBuilder.UseSqlServer("Server=DESKTOP-KHEDHML\\SQLEXPRESS;Database=fastrade;User Id=sa; Password=132");
+                 optionsBuilder.UseSqlServer("Server=Vitor-PC\\SQLEXPRESS;Database=fastrade;Trusted_Connection=true");
             }
         }
 

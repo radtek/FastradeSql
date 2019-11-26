@@ -117,7 +117,6 @@ namespace backend.Controllers {
                 await _Repositorio.Alterar (usuario);
             } catch (DbUpdateConcurrencyException) {
                 var usuario_valido = await _Repositorio.BuscarPorID (id);
-
                 if (usuario_valido == null) {
                     return NotFound ();
                 } else {

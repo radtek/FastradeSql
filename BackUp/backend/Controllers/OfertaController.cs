@@ -66,8 +66,9 @@ namespace backend.Controllers {
                 oferta.IdProduto = Convert.ToInt32 (Request.Form["IdProduto"]);
                 oferta.IdUsuario = Convert.ToInt32 (Request.Form["IdUsuario"]);
                 oferta.Quantidade = Convert.ToInt32 (Request.Form["Quantidade"]);
+                oferta.Validade = Convert.ToDateTime (Request.Form["Validade"]);
                 oferta.Preco = Request.Form["Preco"];
-                oferta.FotoUrlOferta = _Upload.Upload (arquivo, "Ofertas");             
+                oferta.FotoUrlOferta = _Upload.Upload (arquivo, "Ofertas");
 
                 await _repositorio.Salvar (oferta);
 
